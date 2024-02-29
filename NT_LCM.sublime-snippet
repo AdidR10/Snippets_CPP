@@ -1,0 +1,18 @@
+<snippet>
+  <content><![CDATA[
+long long GCD(long long a, long long b) {
+  if (a == 0) return b;
+  if (b == 0) return a;
+  if (a < b) swap(a, b);
+  return GCD(a % b, b);
+}
+long long LCM(long long a, long long b) {
+	return (a * b) / GCD(a, b);
+}
+]]></content>
+  <!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+  <tabTrigger>NT_LCM</tabTrigger>
+  <!-- Optional: Set a scope to limit where the snippet will trigger -->
+  <scope>source.c++</scope>
+</snippet>
+

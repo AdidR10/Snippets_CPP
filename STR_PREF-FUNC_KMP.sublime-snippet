@@ -1,0 +1,23 @@
+<snippet>
+  <content><![CDATA[
+vector<int> prefix_function(int n, const string &s) { // O(n)
+  vector<int> p(n, 0);
+  int k = 0; // k = π(i - 1)
+  for (int i = 1; i < n; i++) {
+    while (k > 0 && !(s[i] == s[k])) {
+      k = p[k - 1];
+    }
+    if (s[i] == s[k]) {
+      k++;
+    }
+    p[i] = k;
+  }
+  return p;
+}
+]]></content>
+  <!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+  <tabTrigger>STR_PREF-FUNC_KMP</tabTrigger>
+  <!-- Optional: Set a scope to limit where the snippet will trigger -->
+  <scope>source.c++</scope>
+</snippet>
+

@@ -1,0 +1,148 @@
+<snippet>
+  <content><![CDATA[
+// Binary Lifting tutorial https://youtu.be/oib-XsjFa-M
+//O(nlogn + q * logn)
+
+// in order to build the parent array, run a dfs making your desired node as the root 
+// and calculate the parent of each node and save it in an array.
+//The get_lca() function has also been added in this code. we can use it anytime after the precalc.
+#include <bits/stdc++.h>
+using namespace std;
+#define ll long long
+//#define int long long
+const int N = 1e5 + 9, MOD = 1e9 + 7;
+
+////graph variables:
+int n;
+vector <vector <int>> adj;
+vector <bool> vis;
+////varaiables of bin lift:
+// Here, it is considered that there are n nodes from (0 - (n - 1));
+vector<vector<int>> up; // int up[N][20];
+vector<int> depth;
+int LOG;
+
+void dfs (int u, int p) {
+    if (u != 0) depth[u] = depth[p] + 1;
+    up[u][0] = p;
+    vis[u] = 1;
+    for (int j = 1; j < LOG; j++) {								//this part takes O(logn) time;
+        up[u][j] = up[ up[u][j - 1] ][j - 1];
+    }
+    for (auto v: adj[u]) {
+        if (!vis[v]) {
+            dfs (v, u);
+        }
+    }
+}
+
+ void TreeAncestor() {     		// O(nlogn) time   (the dfs mainly takes this time);
+    LOG = 0;
+    while((1 << LOG) <= n) {
+        LOG++;
+    }
+    up = vector<vector<int>>(n, vector<int>(LOG));
+    depth = vector<int>(n);
+    //////----- up[v][j] is 2^j -th ancestor of node v -----///////
+    ///WAY-1:
+    // for(int v = 0; v < n; v++) {    //// it can be done in this way when parent[i] < i  where i is the node number.
+    //     up[v][0] = parent[v];
+    //     if(v != 0) {
+    //         depth[v] = depth[parent[v]] + 1;
+    //     }
+    //     for(int j = 1; j < LOG; j++) {
+    //         up[v][j] = up[ up[v][j-1] ][j-1];
+    //     }
+    // }
+    ////WAY-2:  // you can use this one jodi depth calc kora na lage.
+    // for(int v = 0; v < n; v++) {    
+    //     up[v][0] = parent[v];
+    // }
+    // for(int j = 1; j < LOG; j++) {
+    //     for(int v = 0; v < n; v++) {
+    //         up[v][j] = up[ up[v][j-1] ][j-1];
+    //     }
+    // }
+    ////WAY-3:  // This is the most ideal one and i prefer this one the most
+    //do dfs starting from the root node and calculate the up values from there.
+
+    //for (int i = 0; i < LOG; i++) {
+    //    up[1][i] = 1;
+    //}
+    dfs(0, 0);
+}
+int getKthAncestor(int node, int k) {  // O(logn) time
+    if(depth[node] < k) {
+        return -1;
+    }   
+    for(int j = LOG - 1; j >= 0; j--) {
+        if(k >= (1 << j)) {
+            node = up[node][j];
+            k -= 1 << j;
+        }
+    }
+    return node;
+}
+
+int get_lca(int a, int b) { // O(log(N))
+    if(depth[a] < depth[b]) {
+        swap(a, b);
+    }
+    // 1) Get same depth.
+    int k = depth[a] - depth[b];
+    for(int j = LOG - 1; j >= 0; j--) {
+        if(k & (1 << j)) {
+            a = up[a][j]; // parent of a
+        }
+    }
+    // 2) if b was ancestor of a then now a==b
+    if(a == b) {
+        return a;
+    }
+    // 3) move both a and b with powers of two
+    for(int j = LOG - 1; j >= 0; j--) {
+        if(up[a][j] != up[b][j]) {
+            a = up[a][j];
+            b = up[b][j];
+        }
+    }
+    return up[a][0];
+}
+
+
+int32_t main () {
+    ios_base::sync_with_stdio(0);cin.tie(0);
+    cin >> n;
+    adj.clear();
+    vis.clear();
+    up.clear();
+    depth.clear();
+
+    // depth.resize(n + 1);
+    adj.resize(n + 1);
+    vis.resize(n + 1);
+    int m = n - 1;
+    while  (m--) {
+        int u, v; cin >> u >> v;
+        adj[u].push_back(v);
+        adj[v].push_back(u);
+    }
+    TreeAncestor();
+
+    int q; cin >> q;
+    while (q--) {
+        int x, k; cin >> x >> k;
+        int ans = getKthAncestor(x, k);
+        if (ans == -1) cout << "Kth ancestor doesn't exist\n";
+        else cout << ans << '\n';
+    }    
+    return 0;
+} 
+
+]]></content>
+  <!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+  <tabTrigger>DS_BINLIFT_FINDING_KTH_ANCESTOR_OF_A_TREE</tabTrigger>
+  <!-- Optional: Set a scope to limit where the snippet will trigger -->
+  <scope>source.c++</scope>
+</snippet>
+

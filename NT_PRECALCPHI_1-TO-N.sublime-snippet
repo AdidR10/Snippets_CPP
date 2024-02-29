@@ -1,0 +1,32 @@
+<snippet>
+  <content><![CDATA[
+const int N = 1e7 + 9;
+int phi[N+2];
+unsigned long long phiSum[N+2];
+//phi[i] = number of numbers from 1 to i that are coprime with i.
+//sumphi[i] = prefix sum of phi[1] ..to .. phi[i];
+
+//Time complexity: O(N * logN);
+void preCalculatePhi(){
+	phi[1] = 1
+    for(int i =2 ; i <= N; i++)
+        phi[i] = i;
+    for(int i = 2; i <= N; i++){
+        if (phi[i] == i){
+            for(int j = i; j <= N; j += i){
+                phi[j] -= phi[j] / i;
+            }
+        }
+    }
+    phiSum[1] = 1;
+    for(int i = 2; i <= N; i++) {
+        phiSum[i]= phi[i] + phiSum[i - 1];
+    }
+}
+]]></content>
+  <!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+  <tabTrigger>NT_PRECALCPHI_1-TO-N</tabTrigger>
+  <!-- Optional: Set a scope to limit where the snippet will trigger -->
+  <scope>source.c++</scope>
+</snippet>
+

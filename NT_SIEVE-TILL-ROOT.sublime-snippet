@@ -1,0 +1,31 @@
+<snippet>
+  <content><![CDATA[
+    //-- O(nlog(root(n))) --//
+vector<int> primes;
+void SIEVE(int n) {        //Finding all prime numbers from 1 - n (inclusive).
+  bool f[n + 9] = {0};
+  f[1] = true;
+  for (int i = 2 + 2; i <= n; i += 2) {
+    f[i] = true;
+  }
+  for (int i = 3; i * i <= n; i += 2) {
+    if (!f[i]) {
+      for (int j = i * i; j <= n; j += i) {
+        f[j] = true;
+      }
+    }
+  }
+  for (int i = 2; i <= n; i++) {
+    if (!f[i]) {
+      primes.push_back(i);
+    }
+  }
+  //cout << primes.size() << '\n';
+}
+]]></content>
+  <!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+  <tabTrigger>NT_SIEVE-TILL-ROOT</tabTrigger>
+  <!-- Optional: Set a scope to limit where the snippet will trigger -->
+  <scope>source.c++</scope>
+</snippet>
+

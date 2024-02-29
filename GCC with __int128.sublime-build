@@ -1,0 +1,13 @@
+{
+    "cmd": ["gcc", "-std=c++17", "-Wl,-stack_size,0x10000000", "-o", "${file_path}/${file_base_name}", "${file}", "-lm", "-O2"],
+    "file_regex": "^(..[^:]*):([0-9]+):?([0-9]+)?:? (.*)$",
+    "working_dir": "${file_path}",
+    "selector": "source.c, source.c++, source.objc, source.objc++",
+    "variants":
+    [
+        {
+            "name": "Run",
+            "cmd": ["${file_path}/${file_base_name}"]
+        }
+    ]
+}

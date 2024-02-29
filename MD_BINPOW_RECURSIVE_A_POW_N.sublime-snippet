@@ -1,0 +1,23 @@
+<snippet>
+  <content><![CDATA[
+    //-- O(logn) --//
+const int MOD = 1e9 + 7;
+// a^n % MOD:
+int BINPOW_RECURSIVE_A_POW_N(int a, int n) {
+  if (n == 1) return a % MOD;
+  if (n % 2 == 0) {
+    int x = BINPOW_RECURSIVE_A_POW_N(a, n / 2);
+    return 1LL * x * x % MOD;
+  }
+  else {
+    int x = BINPOW_RECURSIVE_A_POW_N(a, n / 2);
+    return (1LL * x * x) % MOD * a % MOD;
+  }
+}
+]]></content>
+  <!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+  <tabTrigger>MD_BINPOW_RECURSIVE_A_POW_N</tabTrigger>
+  <!-- Optional: Set a scope to limit where the snippet will trigger -->
+  <scope>source.c++</scope>
+</snippet>
+

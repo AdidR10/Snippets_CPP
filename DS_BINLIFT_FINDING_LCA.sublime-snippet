@@ -1,0 +1,95 @@
+<snippet>
+  <content><![CDATA[
+// video https://youtu.be/dOAxrhAUIhA
+// problem https://www.spoj.com/problems/LCASQ/
+#include <bits/stdc++.h>
+using namespace std;
+//O(nlogn + q * logn) time complexity
+
+
+int LOG;
+int n;
+vector<vector<int>> children;
+vector <vector <int>> up; // up[v][j] is 2^j-th ancestor of v
+vector <int> depth;
+
+void dfs(int a) {
+    for(int b : children[a]) {
+        depth[b] = depth[a] + 1;
+        up[b][0] = a; // a is parent of b
+        for(int j = 1; j < LOG; j++) {
+            up[b][j] = up[up[b][j-1]][j-1];
+        }
+        dfs(b);
+    }
+}
+
+int get_lca(int a, int b) { // O(log(N))
+    if(depth[a] < depth[b]) {
+        swap(a, b);
+    }
+    // 1) Get same depth.
+    int k = depth[a] - depth[b];
+    for(int j = LOG - 1; j >= 0; j--) {
+        if(k & (1 << j)) {
+            a = up[a][j]; // parent of a
+        }
+    }
+    // 2) if b was ancestor of a then now a==b
+    if(a == b) {
+        return a;
+    }
+    // 3) move both a and b with powers of two
+    for(int j = LOG - 1; j >= 0; j--) {
+        if(up[a][j] != up[b][j]) {
+            a = up[a][j];
+            b = up[b][j];
+        }
+    }
+    return up[a][0];
+}
+
+ void TreeAncestor() {             // O(nlogn) time   (the dfs mainly takes this time);
+    LOG = 0;
+    while((1 << LOG) <= n) {
+        LOG++;
+    }
+    up = vector<vector<int>> (n, vector<int>(LOG));
+    depth = vector<int> (n);
+    //if one indexing and one is considered as the root, then must do this->
+    // for (int i = 0; i < LOG; i++) {
+    //     up[1][i] = 1;
+    // }
+    dfs(0);
+}
+
+int main() {
+    
+    cin >> n;
+    children.clear();
+    children.resize(n + 1);
+    int m = n - 1;
+    while (m--) {
+        int u, v; cin >> u >> v;
+        children[u].push_back(v);
+    }
+    
+
+    TreeAncestor();
+    // cout << "YO" << '\n';
+    // return 0;
+    int q; cin >> q;
+    for(int i = 0; i < q; i++) {
+        int a, b; cin >> a >> b;
+        // cout << "YO" << '\n';
+        cout << get_lca(a, b) << "\n";
+    }
+}
+
+]]></content>
+  <!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+  <tabTrigger>DS_BINLIFT_FINDING_LCA</tabTrigger>
+  <!-- Optional: Set a scope to limit where the snippet will trigger -->
+  <scope>source.c++</scope>
+</snippet>
+

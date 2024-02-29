@@ -1,0 +1,109 @@
+<snippet>
+  <content><![CDATA[
+struct Trie {
+    static const int SZ = 26;
+    char ch = '0'
+    struct node {
+        bool endmark;
+        node* next[SZ];
+        node() {
+            endmark = false;
+            for (int i = 0; i < SZ; i++)
+                next[i] = NULL;
+        }
+    }*root;
+    Trie () {
+        root = new node();
+    }
+    void insert(string &str)
+    {
+        node* curr = root;
+        for (int i = 0; i < str.size(); i++) {
+            int id = str[i] - ch;
+            if (curr->next[id] == NULL)
+                curr->next[id] = new node();
+            curr = curr->next[id];
+        }
+        curr->endmark = true;
+    }
+    bool search(string &str)
+    {
+        node* curr = root;
+        for (int i = 0; i < str.size(); i++) {
+            int id = str[i] - ch;
+            if (curr->next[id] == NULL)
+                return false;
+            curr = curr->next[id];
+        }
+        return curr->endmark;
+    }
+    void delall(node* cur)
+    {
+        for (int i = 0; i < SZ; i++)
+            if (cur->next[i])
+                delall(cur->next[i]);
+
+        delete (cur);
+    }
+    bool isEmpty(node* root){
+        for (int i = 0; i < SZ; i++)
+            if (root->next[i])
+                return false;
+        return true;
+    }
+    // Recursive function to delete a key from given Trie
+    node* remove(node* root, string key, int depth = 0)
+    {
+        // If tree is empty
+        if (!root)
+            return NULL;
+        // If last character of key is being processed
+        if (depth == key.size()) {
+            // This node is no more end of word after
+            // removal of given key
+            if (root->endmark)
+                root->endmark = false;
+            // If given is not prefix of any other word
+            if (isEmpty(root)) {
+                delete (root);
+                root = NULL;
+            }
+            return root;
+        }
+        // If not last character, recur for the child
+        // obtained using ASCII value
+        int id = key[depth] - 'a';
+        root->next[id] =
+            remove(root->next[id], key, depth + 1);
+        // If root does not have any child (its only child got
+        // deleted), and it is not end of another word.
+        if (isEmpty(root) && root->endmark == false) {
+            delete (root);
+            root = NULL;
+        }
+        return root;
+    }
+} tr;
+
+string prepare (ll n) {
+    string s;
+    while (n) {
+        s.push_back(n % 2 + ch);
+        n >>= 1;
+    }
+    reverse(s.begin(), s.end());
+    string ans (40, ch);
+    int t = s.size();
+    while (t--) {
+        ans.pop_back();
+    }
+    ans += s;
+    return ans;
+}
+]]></content>
+  <!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+  <tabTrigger>DS_TRIE</tabTrigger>
+  <!-- Optional: Set a scope to limit where the snippet will trigger -->
+  <scope>source.c++</scope>
+</snippet>
+

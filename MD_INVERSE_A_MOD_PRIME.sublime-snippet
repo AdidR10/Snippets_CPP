@@ -1,0 +1,34 @@
+<snippet>
+  <content><![CDATA[
+    //-- O(logn) --//
+int MOD = 1e9 + 7;
+
+int power(int a, int n) {
+  if (n == 1) return a % MOD;
+  if (n % 2 == 0) {
+    int x = power(a, n / 2);
+    return 1LL * x * x % MOD;
+  }
+  else {
+    int x = power(a, n / 2);
+    return (1LL * x * x) % MOD * a % MOD;
+  }
+}
+
+
+
+//finding 1 / a % p    where p is a prime number. 
+int INVERSE_A_MOD_PRIME(int a, int p) {
+	int tmp_mod = MOD;
+	MOD = p;
+	int ans = power(a, p - 2);
+	MOD = tmp_mod;
+	return ans;
+}
+]]></content>
+  <!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+  <tabTrigger>MD_INVERSE_A_MOD_PRIME</tabTrigger>
+  <!-- Optional: Set a scope to limit where the snippet will trigger -->
+  <scope>source.c++</scope>
+</snippet>
+

@@ -1,0 +1,23 @@
+<snippet>
+  <content><![CDATA[
+    ///-- O(root(n))--///
+vector<int> prime_factors;
+void PRIME_FACTORIZATION_ROOT_N(int n) {
+  for (int i = 2; i * i <= n; i++) {
+    if (n % i == 0) {
+      while (n % i == 0) {
+        prime_factors.push_back(i);
+        n /= i;
+      }
+    }
+  }
+  if (n > 1) v.push_back(n);
+  //for (auto x: v) cout << x << ' ';
+}
+]]></content>
+  <!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+  <tabTrigger>NT_PRIME_FACTORIZATION_ROOT_N</tabTrigger>
+  <!-- Optional: Set a scope to limit where the snippet will trigger -->
+  <scope>source.c++</scope>
+</snippet>
+

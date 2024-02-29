@@ -1,0 +1,92 @@
+<snippet>
+  <content><![CDATA[
+/*adid_r10*/
+#include <bits/stdc++.h>
+using namespace std;
+#define ll long long
+//#define int long long
+const int N = 1e5 + 9, MOD = 1e9 + 7;
+    
+//// Total Code time complexity: O(nlogn)
+
+vector <int> adj[N];
+int col[N], colcnt[N], sz[N];
+
+int TM = 1;
+int st [N], ft[N], node_start[N];
+void dfsz_and_eulerTour (int u, int p) {
+    sz[u] = 1;
+    node_start[TM] = u;
+    st[u] = TM++;
+    for (auto v: adj[u]) {
+        if (v != p) {
+            dfsz_and_eulerTour (v, u);
+            sz[u] += sz[v];
+        }
+    }
+    ft[u] = TM;
+}
+void dfs (int u, int p, bool keep) {
+    int mxsz = -1, bigchild = -1;
+    for (auto v: adj[u]) {
+        if (v != p) {
+            if (sz[v] > mxsz) {
+                mxsz = sz[v];
+                bigchild = v;
+            }
+        }
+    }
+
+    for (auto v: adj[u]) {
+        if (v != p && v != bigchild) {
+            dfs(v, u, 0);
+        }
+    }
+    if (bigchild != -1) {
+        dfs(bigchild, u, 1);
+    }
+    
+    for (auto v: adj[u]) {
+        if (v != p && v != bigchild) {
+            for (int t = st[v]; t < ft[v]; t++) {
+                // OPS(node_start[t], mxfrq, sum);
+                colcnt[col[node_start[t]]]++;
+            }
+        } 
+
+    }
+    // OPS(u, mxfrq, sum);
+    colcnt[col[u]]++;
+    //now colcnt[c] is the number of vertices in subtree of vertex u that has color c. You can answer the queries 
+
+    if (keep == 0) {
+        for (int t = st[u]; t < ft[u]; t++) {
+            int cc = node_start[t];
+            colcnt[col[cc]]--;
+        }
+    }
+}
+
+int32_t main () {
+    ios_base::sync_with_stdio(0);cin.tie(0);
+    int n; cin >> n;
+    for(int i = 1; i <= n; i++) {
+        cin >> col[i];
+    }   
+
+    for(int i = 1; i < n; i++) {
+        int u, v; cin >> u >> v;
+        adj[u].push_back(v);
+        adj[v].push_back(u);
+    }
+    dfsz_and_eulerTour(1, -1);
+    dfs (1, -1, 0);
+    return 0;
+} 
+]]></content>
+  <!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+  <tabTrigger>DS_DSU_ON_TREE(SMALL_TO_LARGE)</tabTrigger>
+  <!-- Optional: Set a scope to limit where the snippet will trigger -->
+  <scope>source.c++</scope>
+</snippet>
+

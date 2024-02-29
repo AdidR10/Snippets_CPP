@@ -1,0 +1,37 @@
+<snippet>
+  <content><![CDATA[
+    ///-- O(nlogn)--///
+vector<int> spf;
+void PRIME_FACTORIZATION_SIEVE_SPF(int n) { 			//---O(nlogn) ---//
+   spf.resize(n + 1);
+  for(int i = 2; i <= n; i += 2) {
+  	spf[i] = 2;
+  }
+  for(int i = 3; i <= n; i += 2) {
+  	spf[i] = i;
+  }
+  for (int i = 3; i * i <= n; i += 2) {			//this sieve part is nlogn
+    for (int j = i; j <= n; j += i) {
+      spf[j] = min(spf[j], i);
+    }
+  }
+}
+
+void QUERY(int q) { 			//---O(nlogn) ---//     // queries q <= 1e6 
+  while (q--) {					//this part is O(n);
+    int x; cin >> x; 									// find prime factorization of x <= 1e6
+    vector<int> ans;
+    while (x > 1) {				//this while part is logn
+      ans.push_back(spf[x]);
+      x /= spf[x];
+    }
+    for (auto x: ans) cout << x << ' '; cout << '\n';
+  }	
+}
+]]></content>
+  <!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+  <tabTrigger>NT_PRIME_FACTORIZATION_SIEVE_SPF___QUERY</tabTrigger>
+  <!-- Optional: Set a scope to limit where the snippet will trigger -->
+  <scope>source.c++</scope>
+</snippet>
+

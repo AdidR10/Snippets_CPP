@@ -1,0 +1,23 @@
+<snippet>
+  <content><![CDATA[
+    ///-- O(nlogn)--///
+vector<int> divs_cnt;
+void COUNT_DIVISORS_FROM_1_TO_N(int n) {
+  divs_cnt.resize(n + 9);
+  for (int i = 1; i <= n; i++) {
+    for (int j = i; j <= n; j += i) {
+      divs_cnt[j]++;
+      // divs_cnt[j] += i // for sum of divisors
+    }
+  }
+  //for (int i = 1; i <= n; i++) {
+  //  cout << divs_cnt[i] << ' ';
+  //}
+}
+]]></content>
+  <!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+  <tabTrigger>NT_COUNT_DIVISORS_FROM_1_TO_N</tabTrigger>
+  <!-- Optional: Set a scope to limit where the snippet will trigger -->
+  <scope>source.c++</scope>
+</snippet>
+

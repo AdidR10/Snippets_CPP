@@ -1,0 +1,62 @@
+<snippet>
+  <content><![CDATA[
+#include <bits/stdc++.h>
+using namespace std;
+#define ll long long
+//#define int long long
+
+const int N = 1e6 + 1, MOD = 1e9 + 7;
+////Here, MOD must be a prime number to satisfy the fermat's principle. Otherwise it won't work.
+int f[N], invf[N];
+
+// a^n % MOD:
+int BINPOW_ITERATIVE_A_POW_N(int a, int n) {
+  int ans = 1 % MOD; 
+  n %= MOD; if(n < 0) n += MOD;
+  while(n) {
+      if(n & 1) ans = 1LL * ans * a % MOD;
+      a = 1LL * a * a % MOD;
+      n >>= 1;
+  }
+  return ans;
+}
+
+void pre_calc_fact_and_inverse_fact() {
+    f[0] = 1;
+    for (int i = 1; i < N; i++) {
+        f[i] = 1LL * i * f[i - 1] % MOD;
+    }
+    // binpow used only once to calculate the last greatest factorial value. // optimized
+    invf[N - 1] = BINPOW_ITERATIVE_A_POW_N(f[N - 1], MOD - 2);
+    for (int i = N - 2; i >= 0; i--) {  
+        invf[i] = 1LL * invf[i + 1] * (i + 1) % MOD;
+    }
+}
+
+int nCr (int n, int r) {
+    if(n < 0 or n < r) return 0;
+    return 1LL * f[n] * invf[r] % MOD * invf[n - r] % MOD;
+}
+
+int nPr(int n, int r) {
+    if (n < 0 or n < r) return 0;
+    return 1LL * f[n] * invf[n - r] % MOD;
+}
+
+int32_t main () {
+    ios_base::sync_with_stdio(0);cin.tie(0);
+    pre_calc_fact_and_inverse_fact();
+    int n; cin >> n;
+    // cout << n << '\n';
+    for (int i = 0; i <= n; i++) {
+        cout << nCr(n, i) << ' ';
+    } cout << '\n';
+    return 0;
+} 
+]]></content>
+  <!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+  <tabTrigger>COMBINATORICS_nCr_nPr</tabTrigger>
+  <!-- Optional: Set a scope to limit where the snippet will trigger -->
+  <scope>source.c++</scope>
+</snippet>
+

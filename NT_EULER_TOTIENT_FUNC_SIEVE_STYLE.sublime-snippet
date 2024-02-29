@@ -1,0 +1,24 @@
+<snippet>
+  <content><![CDATA[
+const int N = 1e6 + 9;
+int phi[N];
+void findPHI() { 
+// sieve type; 
+// calc value of phi[i] for numbers from 1 to N; 
+// nloglogn time complexity
+    for (int i = 1; i < N; i++) phi[i] = i;
+    for (int i = 2; i < N; i++) {
+        if (phi[i] == i) {  // if i is prime
+            for (int j = i; j < N; j += i) {
+                phi[j] -= phi[j] / i;
+            }
+        }
+    }
+}
+]]></content>
+  <!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+  <tabTrigger>NT_EULER_TOTIENT_FUNC_SIEVE_STYLE</tabTrigger>
+  <!-- Optional: Set a scope to limit where the snippet will trigger -->
+  <scope>source.c++</scope>
+</snippet>
+
